@@ -1,7 +1,7 @@
 use std::{collections::HashMap, i32, time::Instant};
 
 use game_color::COLORS;
-use macroquad::prelude::*;
+use macroquad::{miniquad::window::order_quit, prelude::*};
 use model::{
     star_system::StarSystem,
     vectors::{Vector2DF, Vector2DI},
@@ -19,10 +19,8 @@ async fn main() {
     // timer for fps
     let mut fps_timer = Instant::now();
 
-    let sec_size = 16.;
+    let mut sec_size = 16.;
     let mut global_pos = Vector2DF { x: 0., y: 0. };
-
-    let key_sens = (8. * get_frame_time()) / (sec_size / 16.);
 
     loop {
         // set number of sectors
@@ -39,6 +37,7 @@ async fn main() {
             n_sectors,
         );
 
+        let key_sens = (6. * get_frame_time()) / (sec_size / 16.);
         //input handle
         if is_key_down(KeyCode::W) {
             global_pos.y -= key_sens;
@@ -51,6 +50,18 @@ async fn main() {
         }
         if is_key_down(KeyCode::D) {
             global_pos.x += key_sens;
+        }
+        // handle quit key
+        if is_key_down(KeyCode::Escape) {
+            order_quit();
+        }
+
+        let zoom_sens = 2. * get_frame_time();
+        if is_key_down(KeyCode::E) {
+            sec_size += zoom_sens;
+        }
+        if is_key_down(KeyCode::Q) && sec_size > 16. {
+            sec_size -= zoom_sens;
         }
 
         //Start Drawing
