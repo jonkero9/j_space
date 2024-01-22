@@ -1,8 +1,26 @@
 use std::collections::HashMap;
 
-use macroquad::{input::is_key_down, miniquad::KeyCode, time::get_frame_time, shapes::draw_circle, color::Color};
+use jonk_utils::cantor_hash;
+use macroquad::{
+    color::{Color, WHITE},
+    input::{is_key_down, mouse_position},
+    miniquad::KeyCode,
+    shapes::{draw_circle, draw_line, draw_rectangle},
+    text::{draw_text, measure_text},
+    time::get_frame_time,
+    window::{screen_height, screen_width},
+};
 
-use crate::model::{vectors::{Vector2DF, Vector2DI}, star_system::StarSystem};
+use crate::{
+    game_color::COLORS,
+    model::{
+        star_system::StarSystem,
+        vectors::{Vector2DF, Vector2DI},
+    },
+    u_gen::factory,
+};
+
+use super::get_n_sectors;
 
 #[derive(Debug)]
 pub struct UniWindow {
@@ -45,7 +63,7 @@ impl UniWindow {
         }
     }
 
-    pub fn handle_draw(&self, n_sectors: Vector2DI, star_map: HashMap<u64, StarSystem>) {
+    pub fn handle_draw(&self, n_sectors: Vector2DI, star_map: &HashMap<u64, StarSystem>) {
         for y in 0..n_sectors.y {
             for x in 0..n_sectors.x {
                 let global_sec = Vector2DI {
@@ -66,6 +84,54 @@ impl UniWindow {
                     );
                 }
             }
+        }
+        for y in 0..n_sectors.y {
+            draw_line(
+                0.,
+                y as f32 * self.sec_size,
+                screen_width(),
+                y as f32 * self.sec_size,
+                1.,
+                WHITE,
+            );
+        }
+        for x in 0..n_sectors.x {
+            draw_line(
+                x as f32 * self.sec_size,
+                0.,
+                x as f32 * self.sec_size,
+                screen_height(),
+                1.,
+                WHITE,
+            );
+        }
+    }
+
+    pub fn handle_map(&mut self) {
+        self.handle_map_movement();
+        self.handle_zoom();
+        let n_sectors = get_n_sectors(screen_width(), screen_height(), self.sec_size);
+        let star_map: HashMap<u64, StarSystem> = factory::new_universe(
+            Vector2DI {
+                x: self.global_pos.x as i32,
+                y: self.global_pos.y as i32,
+            },
+            n_sectors,
+        );
+        self.handle_draw(n_sectors, &star_map);
+
+        let m_pos = mouse_position();
+        if let Some(star) = star_map.get(&cantor_hash(
+            (self.global_pos.x + m_pos.0 / self.sec_size) as i32,
+            (self.global_pos.y + m_pos.1 / self.sec_size) as i32,
+        )) {
+            let description = &format!("star {}, {}", star.location.x, star.location.y);
+            let x = 10.;
+            let y = 100.;
+            let w = measure_text(description, None, 32, 1.).width;
+            let h = 400.;
+            draw_rectangle(x, y, w, h, COLORS.bg);
+            draw_text(description, x, y + 32., 32., COLORS.white);
         }
     }
 }
