@@ -20,7 +20,9 @@ async fn main() {
     let mut fps_timer = Instant::now();
 
     let sec_size = 16.;
-    let global_pos = Vector2DF { x: 0., y: 0. };
+    let mut global_pos = Vector2DF { x: 0., y: 0. };
+
+    let key_sens = (8. * get_frame_time()) / (sec_size / 16.);
 
     loop {
         // set number of sectors
@@ -37,17 +39,51 @@ async fn main() {
             n_sectors,
         );
 
+        //input handle
+        if is_key_down(KeyCode::W) {
+            global_pos.y -= key_sens;
+        }
+        if is_key_down(KeyCode::A) {
+            global_pos.x -= key_sens;
+        }
+        if is_key_down(KeyCode::S) {
+            global_pos.y += key_sens;
+        }
+        if is_key_down(KeyCode::D) {
+            global_pos.x += key_sens;
+        }
+
         //Start Drawing
         clear_background(COLORS.bg);
-        for star in star_map.values() {
-            draw_circle(
-                (star.location.x as f32 * sec_size) + (sec_size / 2.),
-                (star.location.y as f32 * sec_size) + (sec_size / 2.),
-                (star.radius / 2000.) * (sec_size / 2.),
-                Color::from(star.star_color),
-            );
+        for y in 0..n_sectors.y {
+            for x in 0..n_sectors.x {
+                let global_sec = Vector2DI {
+                    x: global_pos.x as i32 + x,
+                    y: global_pos.y as i32 + y,
+                };
+                let hash_key = jonk_utils::cantor_hash(global_sec.x, global_sec.y);
+                if let Some(star) = star_map.get(&hash_key) {
+                    let sec_to_screen = Vector2DF {
+                        x: x as f32 * sec_size,
+                        y: y as f32 * sec_size,
+                    };
+                    draw_circle(
+                        sec_to_screen.x + (sec_size / 2.),
+                        sec_to_screen.y + (sec_size / 2.),
+                        (star.radius / 2000.) * (sec_size / 2.),
+                        Color::from(star.star_color),
+                    );
+                }
+            }
         }
-        draw_text(&format!("{}", get_fps()), 20., 20., 32., COLORS.white);
+
+        draw_text(
+            &format!("fps {} pos: {}, {}", get_fps(), global_pos.x, global_pos.y),
+            20.,
+            20.,
+            32.,
+            COLORS.white,
+        );
 
         // check frame time for fps
         if min_f_time < fps_timer.elapsed().as_secs_f32() {
