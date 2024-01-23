@@ -18,7 +18,7 @@ use crate::{
     u_gen::factory,
 };
 
-use super::{draw_lines, get_n_sectors};
+use super::{get_n_sectors, draw_lines_in_window};
 
 #[derive(Debug)]
 pub struct UniWindow {
@@ -131,7 +131,8 @@ impl UniWindow {
             self.global_pos.x as i32 + (m_pos.0 / self.sec_size) as i32,
             self.global_pos.y as i32 + (m_pos.1 / self.sec_size) as i32,
         )) {
-            draw_lines(
+            draw_lines_in_window(
+                2,
                 (10., 100.),
                 vec![
                     format!("Star {}, {}", star.location.x, star.location.y),
@@ -141,7 +142,7 @@ impl UniWindow {
                     format!("Luminosity: {}", star.luminosity),
                     format!("Mass: {}", star.mass),
                     format!("Radius: {}", star.radius),
-                    format!("Num of Plantes: {}", star.planets.len()),
+                    format!("Num of Planets: {}", star.planets.len()),
                 ],
             );
         }

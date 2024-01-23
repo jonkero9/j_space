@@ -1,4 +1,9 @@
-use macroquad::{miniquad::window::order_quit, prelude::*};
+use game_color::COLORS;
+use macroquad::{
+    miniquad::window::order_quit,
+    prelude::*,
+    ui::root_ui,
+};
 use std::time::Instant;
 use ui::{draw_lines_in_window, uni_window::UniWindow};
 
@@ -9,6 +14,15 @@ pub mod ui;
 
 #[macroquad::main("J_space")]
 async fn main() {
+    let mut theme_skin = root_ui().default_skin();
+    theme_skin.label_style = root_ui()
+        .style_builder()
+        .text_color(COLORS.white)
+        .font_size(ui::FONT_SIZE as u16)
+        .build();
+    theme_skin.window_style = root_ui().style_builder().color(COLORS.bg).build();
+    root_ui().push_skin(&theme_skin);
+
     // set fps value
     let min_f_time = 1. / 60.;
     // timer for fps

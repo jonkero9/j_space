@@ -9,7 +9,7 @@ use macroquad::{
 };
 pub mod uni_window;
 
-const FONT_SIZE: f32 = 32.;
+pub const FONT_SIZE: f32 = 32.;
 const MARGIN_SIZE: f32 = 16.;
 
 pub fn get_n_sectors(screen_x: f32, screen_y: f32, sec_size: f32) -> Vector2DI {
@@ -42,7 +42,7 @@ pub fn draw_lines(pos: (f32, f32), lines: Vec<String>) {
 
 pub fn draw_lines_in_window(id: u64, pos: (f32, f32), lines: Vec<String>) {
     let longest_string = lines.iter().max_by(|x, y| x.len().cmp(&y.len())).unwrap();
-    let text_measure = measure_text(&longest_string, None, 22, 1.);
+    let text_measure = measure_text(&longest_string, None, FONT_SIZE as u16, 1.);
     widgets::Window::new(
         id,
         Vec2::new(pos.0, pos.1),
