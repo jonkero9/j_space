@@ -29,6 +29,12 @@ pub struct UniWindow {
     pub show_debug: bool,
 }
 
+impl Default for UniWindow {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl UniWindow {
     pub fn new() -> UniWindow {
         UniWindow {
@@ -121,20 +127,7 @@ impl UniWindow {
         }
     }
 
-    pub fn handle_map(&mut self) {
-        self.handle_key_press();
-        self.handle_map_movement();
-        self.handle_zoom();
-        let n_sectors = get_n_sectors(screen_width(), screen_height(), self.sec_size);
-        let star_map: HashMap<u64, StarSystem> = factory::new_universe(
-            Vector2DI {
-                x: self.global_pos.x as i32,
-                y: self.global_pos.y as i32,
-            },
-            n_sectors,
-        );
-        self.handle_draw(n_sectors, &star_map);
-
+    pub fn handle_mouse_hover(&self, star_map: &HashMap<u64, StarSystem>) {
         let m_pos = mouse_position();
         if let Some(star) = star_map.get(&cantor_hash(
             self.global_pos.x as i32 + (m_pos.0 / self.sec_size) as i32,
@@ -148,5 +141,21 @@ impl UniWindow {
             draw_rectangle(x, y, w, h, COLORS.bg);
             draw_text(description, x, y + 32., 32., COLORS.white);
         }
+    }
+
+    pub fn handle_map(&mut self) {
+        self.handle_key_press();
+        self.handle_map_movement();
+        self.handle_zoom();
+        let n_sectors = get_n_sectors(screen_width(), screen_height(), self.sec_size);
+        let star_map: HashMap<u64, StarSystem> = factory::new_universe(
+            Vector2DI {
+                x: self.global_pos.x as i32,
+                y: self.global_pos.y as i32,
+            },
+            n_sectors,
+        );
+        self.handle_draw(n_sectors, &star_map);
+        self.handle_mouse_hover(&star_map);
     }
 }
