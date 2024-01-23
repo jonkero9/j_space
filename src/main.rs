@@ -1,6 +1,6 @@
 use macroquad::{miniquad::window::order_quit, prelude::*};
 use std::time::Instant;
-use ui::{draw_lines, uni_window::UniWindow};
+use ui::{draw_lines_in_window, uni_window::UniWindow};
 
 pub mod game_color;
 pub mod model;
@@ -23,7 +23,8 @@ async fn main() {
         uni_win.handle_map();
 
         // Draw Debug info
-        draw_lines(
+        draw_lines_in_window(
+            1,
             (10.0, 10.0),
             vec![
                 format!(

@@ -133,7 +133,16 @@ impl UniWindow {
         )) {
             draw_lines(
                 (10., 100.),
-                vec![format!("star {}, {}", star.location.x, star.location.y)],
+                vec![
+                    format!("Star {}, {}", star.location.x, star.location.y),
+                    format!("Color: {:?}", star.star_color),
+                    format!("Radius: {}", star.radius),
+                    format!("Surface Temp: {}", star.surface_temp),
+                    format!("Luminosity: {}", star.luminosity),
+                    format!("Mass: {}", star.mass),
+                    format!("Radius: {}", star.radius),
+                    format!("Num of Plantes: {}", star.planets.len()),
+                ],
             );
         }
     }
