@@ -26,7 +26,7 @@ pub fn draw_lines(pos: (f32, f32), lines: Vec<String>) {
         pos.0,
         pos.1,
         text_measure.width + (2. * MARGIN_SIZE),
-        ((text_measure.height * lines.len() as f32) + text_measure.height) + (2. * MARGIN_SIZE),
+        ((text_measure.height * lines.len() as f32) + text_measure.height) + (4. * MARGIN_SIZE),
         COLORS.bg,
     );
     for (i, ele) in lines.iter().enumerate() {
