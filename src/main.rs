@@ -27,12 +27,12 @@ async fn main() {
             (10.0, 10.0),
             vec![
                 format!(
-                    "fps {} pos: {}, {}",
+                    "fps {} pos: {:.2}, {:.2}",
                     get_fps(),
                     uni_win.global_pos.x,
                     uni_win.global_pos.y
                 ),
-                format!("runtime {}", run_time.elapsed().as_secs_f32()),
+                format!("runtime {:.4}", run_time.elapsed().as_secs_f32()),
             ],
         );
 
