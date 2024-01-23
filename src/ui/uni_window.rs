@@ -5,14 +5,12 @@ use macroquad::{
     color::{Color, WHITE},
     input::{is_key_down, is_key_pressed, mouse_position},
     miniquad::KeyCode,
-    shapes::{draw_circle, draw_line, draw_rectangle},
-    text::{draw_text, measure_text},
+    shapes::{draw_circle, draw_line},
     time::get_frame_time,
     window::{screen_height, screen_width},
 };
 
 use crate::{
-    game_color::COLORS,
     model::{
         star_system::StarSystem,
         vectors::{Vector2DF, Vector2DI},
@@ -20,7 +18,7 @@ use crate::{
     u_gen::factory,
 };
 
-use super::get_n_sectors;
+use super::{draw_lines, get_n_sectors};
 
 #[derive(Debug)]
 pub struct UniWindow {
@@ -133,13 +131,10 @@ impl UniWindow {
             self.global_pos.x as i32 + (m_pos.0 / self.sec_size) as i32,
             self.global_pos.y as i32 + (m_pos.1 / self.sec_size) as i32,
         )) {
-            let description = &format!("star {}, {}", star.location.x, star.location.y);
-            let x = 10.;
-            let y = 100.;
-            let w = measure_text(description, None, 32, 1.).width;
-            let h = 400.;
-            draw_rectangle(x, y, w, h, COLORS.bg);
-            draw_text(description, x, y + 32., 32., COLORS.white);
+            draw_lines(
+                (10., 100.),
+                vec![format!("star {}, {}", star.location.x, star.location.y)],
+            );
         }
     }
 

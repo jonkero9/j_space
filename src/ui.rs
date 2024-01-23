@@ -22,7 +22,7 @@ pub fn draw_lines(pos: (f32, f32), lines: Vec<String>) {
         pos.0,
         pos.1,
         text_measure.width,
-        text_measure.height,
+        text_measure.height+ FONT_SIZE,
         COLORS.bg,
     );
     draw_text(&joined, pos.0, pos.1 + FONT_SIZE, FONT_SIZE, COLORS.white);
