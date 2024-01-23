@@ -122,8 +122,8 @@ impl UniWindow {
 
         let m_pos = mouse_position();
         if let Some(star) = star_map.get(&cantor_hash(
-            (self.global_pos.x + m_pos.0 / self.sec_size) as i32,
-            (self.global_pos.y + m_pos.1 / self.sec_size) as i32,
+            self.global_pos.x as i32 + (m_pos.0 / self.sec_size) as i32,
+            self.global_pos.y as i32 + (m_pos.1 / self.sec_size) as i32,
         )) {
             let description = &format!("star {}, {}", star.location.x, star.location.y);
             let x = 10.;
