@@ -1,6 +1,7 @@
+use std::i32;
+
 use crate::{game_color::COLORS, model::vectors::Vector2DI};
 use macroquad::{
-    math::i32,
     shapes::draw_rectangle,
     text::{draw_text, measure_text},
 };
@@ -16,14 +17,22 @@ pub fn get_n_sectors(screen_x: f32, screen_y: f32, sec_size: f32) -> Vector2DI {
 }
 
 pub fn draw_lines(pos: (f32, f32), lines: Vec<String>) {
-    let joined = lines.join("\n");
-    let text_measure = measure_text(&joined, None, FONT_SIZE as u16, 1.);
+    let longest_string = lines.iter().max_by(|x, y| x.len().cmp(&y.len())).unwrap();
+    let text_measure = measure_text(&longest_string, None, FONT_SIZE as u16, 1.);
     draw_rectangle(
         pos.0,
         pos.1,
         text_measure.width,
-        text_measure.height+ FONT_SIZE,
+        text_measure.height + FONT_SIZE * lines.len() as f32,
         COLORS.bg,
     );
-    draw_text(&joined, pos.0, pos.1 + FONT_SIZE, FONT_SIZE, COLORS.white);
+    for (i, ele) in lines.iter().enumerate() {
+        draw_text(
+            &ele,
+            pos.0,
+            (pos.1 + FONT_SIZE) * (i as f32 + 1.),
+            FONT_SIZE,
+            COLORS.white,
+        );
+    }
 }
