@@ -1,7 +1,6 @@
-use game_color::COLORS;
 use macroquad::{miniquad::window::order_quit, prelude::*};
 use std::time::Instant;
-use ui::uni_window::UniWindow;
+use ui::{draw_lines, uni_window::UniWindow};
 
 pub mod game_color;
 pub mod model;
@@ -18,22 +17,23 @@ async fn main() {
     let mut uni_win = UniWindow::new();
 
     loop {
+        let run_time = Instant::now();
         clear_background(BLACK);
 
         uni_win.handle_map();
 
         // Draw Debug info
-        draw_text(
-            &format!(
-                "fps {} pos: {}, {}",
-                get_fps(),
-                uni_win.global_pos.x,
-                uni_win.global_pos.y
-            ),
-            20.,
-            20.,
-            32.,
-            COLORS.white,
+        draw_lines(
+            (10.0, 10.0),
+            vec![
+                format!(
+                    "fps {} pos: {}, {}",
+                    get_fps(),
+                    uni_win.global_pos.x,
+                    uni_win.global_pos.y
+                ),
+                format!("runtime {}", run_time.elapsed().as_secs_f32()),
+            ],
         );
 
         // handle quit key
