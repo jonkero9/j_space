@@ -18,7 +18,7 @@ use crate::{
     u_gen::factory,
 };
 
-use super::{get_n_sectors, draw_lines_in_window};
+use super::{draw_lines_in_window, get_n_sectors};
 
 #[derive(Debug)]
 pub struct UniWindow {
