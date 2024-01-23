@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use jonk_utils::cantor_hash;
 use macroquad::{
     color::{Color, WHITE},
-    input::{is_key_down, mouse_position},
+    input::{is_key_down, is_key_pressed, mouse_position},
     miniquad::KeyCode,
     shapes::{draw_circle, draw_line, draw_rectangle},
     text::{draw_text, measure_text},
@@ -26,6 +26,7 @@ use super::get_n_sectors;
 pub struct UniWindow {
     pub sec_size: f32,
     pub global_pos: Vector2DF,
+    pub show_debug: bool,
 }
 
 impl UniWindow {
@@ -33,6 +34,13 @@ impl UniWindow {
         UniWindow {
             sec_size: 16.,
             global_pos: Vector2DF { x: 0., y: 0. },
+            show_debug: false,
+        }
+    }
+
+    pub fn handle_key_press(&mut self) {
+        if is_key_pressed(KeyCode::Backslash) {
+            self.show_debug = !self.show_debug;
         }
     }
 
@@ -85,29 +93,36 @@ impl UniWindow {
                 }
             }
         }
-        for y in 0..n_sectors.y {
-            draw_line(
-                0.,
-                y as f32 * self.sec_size,
-                screen_width(),
-                y as f32 * self.sec_size,
-                1.,
-                WHITE,
-            );
-        }
-        for x in 0..n_sectors.x {
-            draw_line(
-                x as f32 * self.sec_size,
-                0.,
-                x as f32 * self.sec_size,
-                screen_height(),
-                1.,
-                WHITE,
-            );
+        self.draw_debug_lines(&n_sectors);
+    }
+
+    fn draw_debug_lines(&self, n_sectors: &Vector2DI) {
+        if self.show_debug {
+            for y in 0..n_sectors.y {
+                draw_line(
+                    0.,
+                    y as f32 * self.sec_size,
+                    screen_width(),
+                    y as f32 * self.sec_size,
+                    1.,
+                    WHITE,
+                );
+            }
+            for x in 0..n_sectors.x {
+                draw_line(
+                    x as f32 * self.sec_size,
+                    0.,
+                    x as f32 * self.sec_size,
+                    screen_height(),
+                    1.,
+                    WHITE,
+                );
+            }
         }
     }
 
     pub fn handle_map(&mut self) {
+        self.handle_key_press();
         self.handle_map_movement();
         self.handle_zoom();
         let n_sectors = get_n_sectors(screen_width(), screen_height(), self.sec_size);
