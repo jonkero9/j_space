@@ -37,7 +37,7 @@ impl UniWindow {
     }
 
     pub fn handle_map_movement(&mut self) {
-        let key_sens = (4. * get_frame_time()) / (self.sec_size / 16.);
+        let key_sens = (8. * get_frame_time()) / (self.sec_size / 8.);
         //input handle
         if is_key_down(KeyCode::W) {
             self.global_pos.y -= key_sens;
