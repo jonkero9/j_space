@@ -10,7 +10,7 @@ use macroquad::{
 pub mod uni_window;
 
 pub const FONT_SIZE: f32 = 32.;
-const MARGIN_SIZE: f32 = 16.;
+pub const MARGIN_SIZE: f32 = 16.;
 
 pub fn get_n_sectors(screen_x: f32, screen_y: f32, sec_size: f32) -> Vector2DI {
     Vector2DI {
@@ -47,8 +47,8 @@ pub fn draw_lines_in_window(id: u64, pos: (f32, f32), lines: Vec<String>) {
         id,
         Vec2::new(pos.0, pos.1),
         Vec2::new(
-            text_measure.width,
-            (text_measure.height * lines.len() as f32) + text_measure.height,
+            text_measure.width + (2. * MARGIN_SIZE),
+            (text_measure.height * lines.len() as f32) + text_measure.height + MARGIN_SIZE,
         ),
     )
     .titlebar(false)

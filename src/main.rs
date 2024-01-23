@@ -1,9 +1,5 @@
 use game_color::COLORS;
-use macroquad::{
-    miniquad::window::order_quit,
-    prelude::*,
-    ui::root_ui,
-};
+use macroquad::{miniquad::window::order_quit, prelude::*, ui::root_ui};
 use std::time::Instant;
 use ui::{draw_lines_in_window, uni_window::UniWindow};
 
@@ -20,7 +16,16 @@ async fn main() {
         .text_color(COLORS.white)
         .font_size(ui::FONT_SIZE as u16)
         .build();
-    theme_skin.window_style = root_ui().style_builder().color(COLORS.bg).build();
+    theme_skin.window_style = root_ui()
+        .style_builder()
+        .margin(RectOffset::new(
+            ui::MARGIN_SIZE,
+            ui::MARGIN_SIZE,
+            ui::MARGIN_SIZE,
+            ui::MARGIN_SIZE,
+        ))
+        .color(COLORS.bg)
+        .build();
     root_ui().push_skin(&theme_skin);
 
     // set fps value
