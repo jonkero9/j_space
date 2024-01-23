@@ -8,6 +8,7 @@ use macroquad::{
 pub mod uni_window;
 
 const FONT_SIZE: f32 = 32.;
+const MARGIN_SIZE: f32 = 16.;
 
 pub fn get_n_sectors(screen_x: f32, screen_y: f32, sec_size: f32) -> Vector2DI {
     Vector2DI {
@@ -22,15 +23,15 @@ pub fn draw_lines(pos: (f32, f32), lines: Vec<String>) {
     draw_rectangle(
         pos.0,
         pos.1,
-        text_measure.width,
-        text_measure.height + FONT_SIZE * lines.len() as f32,
+        text_measure.width + (2. * MARGIN_SIZE),
+        ((text_measure.height * lines.len() as f32) + text_measure.height) + (2. * MARGIN_SIZE),
         COLORS.bg,
     );
     for (i, ele) in lines.iter().enumerate() {
         draw_text(
             &ele,
-            pos.0,
-            (pos.1 + FONT_SIZE) * (i as f32 + 1.),
+            pos.0 + MARGIN_SIZE,
+            MARGIN_SIZE + ((pos.1 + text_measure.height) * (i as f32 + 1.)),
             FONT_SIZE,
             COLORS.white,
         );
